@@ -7,84 +7,33 @@ using System.Threading.Tasks;
 
 namespace Laba13
 {
-    class List<PlacesV> : IEnumerable<PlacesV>, ICloneable, ICollection<PlacesV>, IComparer<PlacesV>
+    class List<T> : IEnumerable<T>, ICloneable, ICollection<T>, IComparer<T>
     {
         private int count = 0;
-        private PlacesV[] mas = new PlacesV[0];
+        private T[] mas = new T[0];
         public List()
         {
 
         }
         public List(int cap)
         {
-            mas = new PlacesV[cap];
+            mas = new T[cap];
         }
-        public List(PlacesV[] mas)
+        public List(T[] mas)
         {
             this.mas = mas;
         }
 
-        public PlacesV this[int index]
+        public T this[int index]
         {
             get { return mas[index]; }
             set { mas[index] = value; }
         }
-        static void RandAdd(List<PlacesV> Main,int CountAdding)
-        {
-            do
-            {
-                Random rand = new Random();
-                string Name = "";
-                int c = rand.Next(4);
-                if (c == 0)
-                {
-                    Region temp;
-                    do
-                    {
-                        Name = RandomNameRegion(rand);
-                        temp = new Region(Name, rand.Next(0, 10000000), rand.Next(0, 20));
-                    } while (Main.Contains(temp));
-                    Add(temp);
-                }
-                else
-                if (c == 1)
-                {
-                    City temp;
-                    do
-                    {
-                        Name = RandomCity(rand);
-                        temp = new City(Name, rand.Next(0, 900000));
-                    } while (Contains((PlacesV)temp));
-                    Places.Add(temp);
-                }
-                else
-                if (c == 2)
-                {
-                    Megapolis temp;
-                    do
-                    {
-                        Name = RandomMegapolis(rand);
-                        temp = new Megapolis(Name, rand.Next(0, 20));
-                    } while (Contains(temp));
-                    Places.Add(temp);
-                }
-                else
-                {
-                    Adres temp;
-                    do
-                    {
-                        Name = RandomAdres(rand);
-                        temp = new Adres(Name);
-                    } while (Contains(temp));
-                    Add(temp);
-                }
-            } while (CountAdding-- != 0);
-        }
-        public void Add(PlacesV item)
+        public void Add(T item)
         {
             if (count == mas.Length)
             {
-                PlacesV[] Temp = new PlacesV[mas.Length + 1];
+                T[] Temp = new T[mas.Length + 1];
                 mas.CopyTo(Temp, 0);
                 Temp[Temp.Length - 1] = item;
                 mas = Temp;
@@ -93,22 +42,28 @@ namespace Laba13
                 mas[count] = item;
             count++;
         }
-        public void Clear()
+        public void Add(PlacesV item)
         {
-            mas = new PlacesV[0];
-        }
-        public void CopyTo(PlacesV[] array, int index)
-        {
-            if (index > 0 && index <= mas.Length)
+            if (count == mas.Length)
             {
-                PlacesV[] Temp = new PlacesV[mas.Length - index + 1];
-                int c = 0;
-                for (int i = index - 1; i < mas.Length; i++)
-                    Temp[c++] = mas[i];
-                array = Temp;
+                PlacesV[] Temp = new PlacesV[mas.Length + 1];
+                mas.CopyTo(Temp, 0);
+                Temp[Temp.Length - 1] = item;
+                mas = new T[mas.Length + 1];
+                Temp.CopyTo(mas, 0);
             }
             else
-                throw new IndexOutOfRangeException();
+            {
+                PlacesV[] Temp = new PlacesV[mas.Length];
+                mas.CopyTo(Temp, 0);
+                Temp[count] = item;
+                Temp.CopyTo(mas, 0);
+            }
+            count++;
+        }
+        public void Clear()
+        {
+            mas = new T[0];
         }
         public bool IsReadOnly
         {
@@ -118,13 +73,18 @@ namespace Laba13
         {
             get { return count; }
         }
-        public bool Remove(PlacesV item)
+
+        public object SyncRoot => throw new NotImplementedException();
+
+        public bool IsSynchronized => throw new NotImplementedException();
+
+        public bool Remove(T item)
         {
             if (mas.Contains(item))
             {
-                PlacesV[] Temp = new PlacesV[mas.Length - 1];
+                T[] Temp = new T[mas.Length - 1];
                 int c = 0, c1 = -1;
-                foreach (PlacesV temp in mas)
+                foreach (T temp in mas)
                 {
                     c1++;
                     if (!temp.Equals(item)) Temp[c++] = mas[c1];
@@ -136,26 +96,34 @@ namespace Laba13
         }
         public void Show()
         {
-            foreach (PlacesV temp in mas)
+            foreach (T temp in mas)
             {
                 Console.WriteLine(temp.ToString());
             }
         }
-        public bool Contains(PlacesV Search)
+        public bool Contains(T Search)
         {
-            foreach (PlacesV temp in mas)
+            foreach (T temp in mas)
             {
                 if (temp.ToString() == Search.ToString()) return true;
             }
             return false;
         }
-        public IEnumerator<PlacesV> GetEnumerator()
+        public bool Contains(PlacesV Search)
         {
-            return ((IEnumerable<PlacesV>)mas).GetEnumerator();//вапрыва
+            foreach (T temp in mas)
+            {
+                if (temp.ToString() == Search.ToString()) return true;
+            }
+            return false;
+        }
+        public IEnumerator<T> GetEnumerator()
+        {
+            return ((IEnumerable<T>)mas).GetEnumerator();//вапрыва
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (this as IEnumerable<PlacesV>).GetEnumerator();
+            return (this as IEnumerable<T>).GetEnumerator();
         }
 
         object ICloneable.Clone()
@@ -166,8 +134,21 @@ namespace Laba13
         {
             Array.Sort(mas);
         }
+        public void CopyTo(T[] array, int index)
+        {
+            if (index > 0 && index <= mas.Length)
+            {
+                T[] Temp = new T[mas.Length - index + 1];
+                int c = 0;
+                for (int i = index - 1; i < mas.Length; i++)
+                    Temp[c++] = mas[i];
+                array = Temp;
+            }
+            else
+                throw new IndexOutOfRangeException();
+        }
 
-        public int Compare(PlacesV x, PlacesV y)
+        public int Compare(T x, T y)
         {
             if (x.ToString().Length == y.ToString().Length) return 0;
             if (x.ToString().Length > y.ToString().Length) return 1;
