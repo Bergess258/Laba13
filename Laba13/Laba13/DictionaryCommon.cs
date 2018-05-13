@@ -258,8 +258,8 @@ namespace Laba13
         {
             int hash = GetHash(item.Key);
             int place = buckets[hash];
-            Point temp = entries[place];
             if (place == -1) return false;
+            Point temp = entries[place];
             do
             {
                 if (temp.Key.ToString() == item.Key.ToString() && temp.Value.ToString() == item.Value.ToString()) return true;
