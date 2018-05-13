@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Laba13.DictionaryCommon&lt;TKey, TValue&gt;" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Laba13.DictionaryCommon&lt;TKey, TValue&gt;.Point" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DictionaryCommon.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAKAAAAAACAEgDBRDAA0NAQACEQEgAACgAAAAABQIRA=</HashCode>
+      <FileName>DictionaryCommon.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Laba13.List&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAEAAAAACAABAYDAAQFAQAAAAEAAAEAABAAABQIAA=</HashCode>
+      <FileName>List.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Laba13.PlacesV">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAQEAAABAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PlacesV.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Laba13.Region">
+    <Position X="7.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAACAAAAAhAAAAAQAAAAAEAAA=</HashCode>
+      <FileName>PlacesV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.City">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgEAAAAAAAAAAAAAAAAQAAAAEAAAAA=</HashCode>
+      <FileName>PlacesV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.Megapolis">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABEAAAAAAAAAABAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>PlacesV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.Adres">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAIAABAAA=</HashCode>
+      <FileName>PlacesV.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.Program">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAgAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.RangeArrayException">
+    <Position X="15" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RangeArrayException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Laba13.TestCollection">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAgIAAABAAAAAAAEBAAAAAAAAAAAAA=</HashCode>
+      <FileName>TestCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
