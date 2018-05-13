@@ -83,7 +83,7 @@ namespace Laba13
                 }
                 else
                 {
-
+                    entries[place] = new Point() { HashCode = hash, Key = key, Value = value, Next = count };
                 }
             }
         }
