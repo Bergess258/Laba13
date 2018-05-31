@@ -42,25 +42,6 @@ namespace Laba13
                 mas[count] = item;
             count++;
         }
-        public void Add(PlacesV item)
-        {
-            if (count == mas.Length)
-            {
-                PlacesV[] Temp = new PlacesV[mas.Length + 1];
-                mas.CopyTo(Temp, 0);
-                Temp[Temp.Length - 1] = item;
-                mas = new T[mas.Length + 1];
-                Temp.CopyTo(mas, 0);
-            }
-            else
-            {
-                PlacesV[] Temp = new PlacesV[mas.Length];
-                mas.CopyTo(Temp, 0);
-                Temp[count] = item;
-                Temp.CopyTo(mas, 0);
-            }
-            count++;
-        }
         public void Clear()
         {
             mas = new T[0];

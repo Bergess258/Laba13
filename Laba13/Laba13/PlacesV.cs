@@ -28,7 +28,6 @@ namespace Laba13
         {
             Name = name;
         }
-
         public int CompareTo(object obj)
         {
             if (obj.ToString() == this.ToString()) return 0;
@@ -224,7 +223,7 @@ namespace Laba13
         }
         public static string RandomAdres(Random rand)
         {
-            string[] Streets = new string[] { "улица Павловская", "улица Бахаревская", "улица Гамовская", "улица Запрудская", "улица Ключевая", "улица Красавинская", "улица Липогорская", "улица Набережная" };
+            string[] Streets = new string[] { "улица Павловская", "улица Бахаревская", "улица Гамовская", "улица Запрудская", "улица Ключевая", "улица Красавинская", "улица Липогорская", "улица Набережная","улица Толбухина","улица Янаульская" };
             string adres = "";
             adres += Streets[rand.Next(0, Streets.Length)] + " ";
             adres += rand.Next(0, 500);

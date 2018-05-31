@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Laba13
 {
-    class DictionaryCommon<TKey,TValue> : IDictionary<TKey, TValue>, IDisposable, ICloneable, IEnumerator
+    class DictionaryCommon<TKey,TValue> : IDictionary<TKey, TValue>, IDisposable, ICloneable, IEnumerator,IEnumerable
     {
         public class Point : IComparable
         {
@@ -19,7 +19,11 @@ namespace Laba13
             {
 
             }
-
+            public Point(TKey key,TValue value)
+            {
+                Value = value;
+                Key = key;
+            }
             public int CompareTo(object x)
             {
                 if (x.ToString() == this.ToString()) return 0;
@@ -39,15 +43,12 @@ namespace Laba13
         private Point[] entries = new Point[100];
         public DictionaryCommon()
         {
-            for (int i = 0; i < SizeMass; i++)
-            {
-                buckets[i] = -1;
-            }
-            Point temp = new Point();
-            for (int i = 0; i < SizeMass; i++)
-            {
-                entries[i] = new Point();
-            }
+            CreateMasses(out buckets, out entries);
+        }
+        public DictionaryCommon(int c)
+        {
+            SizeMass = c;
+            CreateMasses(out buckets, out entries);
         }
         public TValue this[TKey key]
         {
@@ -75,16 +76,8 @@ namespace Laba13
             set
             {
                 int hash = GetHash(key);
-                int place = buckets[hash];
-                if (place == -1)
-                {
-                    buckets[hash] = count;
-                    entries[count]= new Point() { HashCode = hash, Key = key, Value = value, Next = count };
-                }
-                else
-                {
-
-                }
+                buckets[hash] = count;
+                entries[count]= new Point() { HashCode = hash, Key = key, Value = value, Next = count };
             }
         }
         public int Count
@@ -149,17 +142,19 @@ namespace Laba13
         {
             int hash = GetHash(key);
             int place = buckets[hash];
+            string ForKey = key.ToString(), ForValue = value.ToString();
             if (place != -1)
             {
                 Point temp = entries[place];
                 do
                 {
-                    if (temp.Key.ToString() == key.ToString() && temp.Value.ToString() == value.ToString()) break;
+                    if (temp.Key.ToString() ==  ForKey&& temp.Value.ToString() == ForValue) break;
                     else
                     {
                         if (temp.Next == -1)
                         {
-                            entries[count] = new Point() { HashCode = hash, Key = key, Value = value, Next = count };
+                            entries[place].Next = count;
+                            entries[count++] = new Point() { HashCode = hash, Key = key, Value = value };
                             break;
                         }
                         temp = entries[temp.Next];
@@ -207,7 +202,6 @@ namespace Laba13
                     buckets = te;
                 }
         }
-
         private void CreateMasses(out int[] te, out Point[] Temp)
         {
             te = new int[SizeMass];
@@ -224,8 +218,7 @@ namespace Laba13
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            this[item.Key] = item.Value;
-            CheckForSize();
+            Add(item.Key, item.Value);
         }
 
         public void Clear()
@@ -245,7 +238,6 @@ namespace Laba13
                 entries[i] = new Point();
             }
         }
-
         private void ClearBuckets()
         {
             for (int i = 0; i < SizeMass; i++)
@@ -253,7 +245,6 @@ namespace Laba13
                 buckets[i] = -1;
             }
         }
-
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
             int hash = GetHash(item.Key);
@@ -284,7 +275,6 @@ namespace Laba13
         {
             throw new NotImplementedException();
         }
-
         public IEnumerator GetEnumerator()
         {
             return ((IEnumerable)buckets).GetEnumerator();
@@ -356,16 +346,19 @@ namespace Laba13
         {
             Clear();
         }
-
         public object Clone()
         {
             Point[] Temp = new Point[SizeMass];
+            int[] f = new int[SizeMass];
             for (int i = 0; i < SizeMass; i++)
+            {
                 Temp[i] = entries[i];
+                f[i] = buckets[i];
+            }
             return new DictionaryCommon<TKey, TValue>
             {
                 count = this.count,
-                buckets = this.buckets,
+                buckets = f,
                 entries = Temp,
                 SizeMass = this.SizeMass
             };
