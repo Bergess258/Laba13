@@ -146,6 +146,7 @@ namespace Laba13
             if (place != -1)
             {
                 Point temp = entries[place];
+                int pla = place;
                 do
                 {
                     if (temp.Key.ToString() ==  ForKey&& temp.Value.ToString() == ForValue) break;
@@ -153,10 +154,11 @@ namespace Laba13
                     {
                         if (temp.Next == -1)
                         {
-                            entries[place].Next = count;
+                            entries[pla].Next = count;
                             entries[count++] = new Point() { HashCode = hash, Key = key, Value = value };
                             break;
                         }
+                        pla = temp.Next;
                         temp = entries[temp.Next];
                     }
                 } while (true);
@@ -277,7 +279,7 @@ namespace Laba13
         }
         public IEnumerator GetEnumerator()
         {
-            return ((IEnumerable)buckets).GetEnumerator();
+            return (IEnumerator)this;
         }
         bool IEnumerator.MoveNext()
         {
