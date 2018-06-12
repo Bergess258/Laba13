@@ -24,6 +24,14 @@ namespace Laba13
                 Value = value;
                 Key = key;
             }
+
+            public Point Clone()
+            {
+                TKey temp = Key;
+                TValue tempval = Value;
+                return new Point(temp, tempval);
+            }
+
             public int CompareTo(object x)
             {
                 if (x.ToString() == this.ToString()) return 0;
@@ -37,7 +45,7 @@ namespace Laba13
             }
         }
         private int count = 0;
-        private int position = 0;
+        private int position = -1;
         private int SizeMass = 100;
         private int[] buckets = new int[100];
         private Point[] entries = new Point[100];
@@ -49,6 +57,16 @@ namespace Laba13
         {
             SizeMass = c;
             CreateMasses(out buckets, out entries);
+        }
+        public Point this[int key]
+        {
+            get
+            {
+                if(key>-1&&key<count)
+                return entries[key];
+                else
+                    throw new RangeArrayException(" Индекс не попадает в диапазон");
+            }
         }
         public TValue this[TKey key]
         {
@@ -76,8 +94,8 @@ namespace Laba13
             set
             {
                 int hash = GetHash(key);
-                buckets[hash] = count;
-                entries[count]= new Point() { HashCode = hash, Key = key, Value = value, Next = count };
+                int place = buckets[GetHash(key)];
+                entries[place]= new Point() { HashCode = hash, Key = key, Value = value, Next = entries[place].Next };
             }
         }
         public int Count
@@ -175,34 +193,52 @@ namespace Laba13
         {
             if (count / (double)SizeMass > 0.7)
             {
-                SizeMass += 100;
+                SizeMass += 200;
                 int[] te;
                 Point[] Temp;
                 CreateMasses(out te, out Temp);
                 for (int i = 0; i < count; i++)
                 {
+                    int hash = GetHash(entries[i].Key);
+                    entries[i].HashCode = hash;
                     Temp[i] = entries[i];
-                    te[GetHash(entries[i].Key)] = i;
+                    Temp[i].Next = -1;
+                    if (te[hash] != -1)
+                    {
+                        Point point = Temp[te[hash]];
+                        do
+                        {
+                            if (point.Next == -1)
+                            {
+                                point.Next = i;
+                                break;
+                            }
+                            point = Temp[point.Next];
+                        } while (true);
+                    }
+                    else
+                    te[hash] = i;
                 }
                 entries = Temp;
                 buckets = te;
             }
-            else
-            if (SizeMass - 100 != 0)
-                if ((count / (double)(SizeMass - 100)) < 0.1)
-                {
-                    SizeMass -= 100;
-                    int[] te;
-                    Point[] Temp;
-                    CreateMasses(out te, out Temp);
-                    for (int i = 0; i < count; i++)
-                    {
-                        Temp[i] = entries[i];
-                        te[GetHash(entries[i].Key)] = i;
-                    }
-                    entries = Temp;
-                    buckets = te;
-                }
+            //else
+            //if (SizeMass - 100 != 0)
+            //    if ((count / (double)(SizeMass - 100)) < 0.1)
+            //    {
+            //        Console.WriteLine("OMYGOD");
+            //        SizeMass -= 100;
+            //        int[] te;
+            //        Point[] Temp;
+            //        CreateMasses(out te, out Temp);
+            //        for (int i = 0; i < count; i++)
+            //        {
+            //            Temp[i] = entries[i];
+            //            te[GetHash(entries[i].Key)] = i;
+            //        }
+            //        entries = Temp;
+            //        buckets = te;
+            //    }
         }
         private void CreateMasses(out int[] te, out Point[] Temp)
         {
@@ -222,7 +258,6 @@ namespace Laba13
         {
             Add(item.Key, item.Value);
         }
-
         public void Clear()
         {
             count = 0;
@@ -253,9 +288,10 @@ namespace Laba13
             int place = buckets[hash];
             if (place == -1) return false;
             Point temp = entries[place];
+            Point Temp = new Point(item.Key, item.Value);
             do
             {
-                if (temp.Key.ToString() == item.Key.ToString() && temp.Value.ToString() == item.Value.ToString()) return true;
+                if (temp.ToString() == Temp.ToString()) return true;
                 if (temp.Next == -1) return false;
                 temp = entries[temp.Next];
             } while (true);
@@ -264,8 +300,8 @@ namespace Laba13
         {
             int hash = GetHash(key);
             int place = buckets[hash];
-            Point temp = entries[place];
             if (place == -1) return false;
+            Point temp = entries[place];
             do
             {
                 if (temp.Key.ToString() == key.ToString()) return true;
@@ -292,13 +328,13 @@ namespace Laba13
         }
         void IEnumerator.Reset()
         {
-            position = 0;
+            position = -1;
         }
         public int GetHash(object adres)
         {
             int hashcode = 0;
             double a = 0.6180339887;
-            foreach (char s in adres.ToString()) hashcode += (int)s;
+            foreach (char s in adres.ToString()) hashcode += s;
             var p = Math.Truncate(hashcode * a);
             var t = (hashcode * a - p)*SizeMass ;
             return (int)t % SizeMass;
@@ -332,18 +368,6 @@ namespace Laba13
         {
             throw new NotImplementedException();
         }
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
-        {
-            return (entries as IEnumerable<KeyValuePair<TKey, TValue>>).GetEnumerator();
-        }
-        public IEnumerable Get()
-        {
-            for(int i = 0; i < count; i++)
-            {
-                yield return entries[i];
-            }
-            yield break;
-        }
         public void Dispose()
         {
             Clear();
@@ -364,6 +388,10 @@ namespace Laba13
                 entries = Temp,
                 SizeMass = this.SizeMass
             };
+        }
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Laba13
 {
-    class List<T> : IEnumerable<T>, ICloneable, ICollection<T>, IComparer<T>
+    class List<T> : IEnumerable, ICloneable, IEnumerator
     {
+        int position = -1;
         private int count = 0;
-        private T[] mas = new T[0];
+        private T[] mas = new T[8];
         public List()
         {
 
@@ -21,9 +22,10 @@ namespace Laba13
         }
         public List(T[] mas)
         {
-            this.mas = mas;
+            int c = 0;
+            foreach (T t in mas)
+                this.mas[c++] = t;
         }
-
         public T this[int index]
         {
             get { return mas[index]; }
@@ -31,16 +33,13 @@ namespace Laba13
         }
         public void Add(T item)
         {
+            mas[count++] = item;
             if (count == mas.Length)
             {
-                T[] Temp = new T[mas.Length + 1];
-                mas.CopyTo(Temp, 0);
-                Temp[Temp.Length - 1] = item;
-                mas = Temp;
+                T[] temp = new T[mas.Length + 12];
+                mas.CopyTo(temp, 0);
+                mas = temp;
             }
-            else
-                mas[count] = item;
-            count++;
         }
         public void Clear()
         {
@@ -54,11 +53,6 @@ namespace Laba13
         {
             get { return count; }
         }
-
-        public object SyncRoot => throw new NotImplementedException();
-
-        public bool IsSynchronized => throw new NotImplementedException();
-
         public bool Remove(T item)
         {
             if (mas.Contains(item))
@@ -84,29 +78,10 @@ namespace Laba13
         }
         public bool Contains(T Search)
         {
-            foreach (T temp in mas)
-            {
-                if (temp.ToString() == Search.ToString()) return true;
-            }
+            for(int i=0;i<count;i++)
+                if (mas[i].ToString() == Search.ToString()) return true;
             return false;
         }
-        public bool Contains(PlacesV Search)
-        {
-            foreach (T temp in mas)
-            {
-                if (temp.ToString() == Search.ToString()) return true;
-            }
-            return false;
-        }
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>)mas).GetEnumerator();//вапрыва
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return (this as IEnumerable<T>).GetEnumerator();
-        }
-
         object ICloneable.Clone()
         {
             return this;
@@ -128,12 +103,27 @@ namespace Laba13
             else
                 throw new IndexOutOfRangeException();
         }
-
-        public int Compare(T x, T y)
+        public void Dispose()
         {
-            if (x.ToString().Length == y.ToString().Length) return 0;
-            if (x.ToString().Length > y.ToString().Length) return 1;
-            return -1;
+            ((IEnumerator)this).Reset();
+        }
+        public bool MoveNext()
+        {
+            if (position < count - 1)
+            {
+                position++;
+                return true;
+            }
+            return false;
+        }
+        public void Reset()
+        {
+            position = -1;
+        }
+        object IEnumerator.Current { get { return mas[position]; } }
+        public IEnumerator GetEnumerator()
+        {
+            return (IEnumerator)this;
         }
     }
 }

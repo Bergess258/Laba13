@@ -14,7 +14,7 @@ namespace Laba13
         {
             Random rand = new Random();
             DictionaryCommon<PlacesV, PlacesV> Dic = new DictionaryCommon<PlacesV, PlacesV>();
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 5000; i++)
             {
                 Thread.Sleep(50);
                 Dic.Add(PlacesV.RandAdd(rand), PlacesV.RandAdd(rand));
